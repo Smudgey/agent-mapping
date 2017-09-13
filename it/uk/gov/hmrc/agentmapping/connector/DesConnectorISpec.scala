@@ -4,7 +4,7 @@ import java.net.URL
 
 import com.kenshoo.play.metrics.Metrics
 import org.scalatestplus.play.OneAppPerSuite
-import uk.gov.hmrc.agentmapping.WSHttp
+import uk.gov.hmrc.agentmapping.config.WSHttp
 import uk.gov.hmrc.agentmapping.stubs.DesStubs
 import uk.gov.hmrc.agentmapping.support.{MetricTestSupport, WireMockSupport}
 import uk.gov.hmrc.agentmtdidentifiers.model.Utr
@@ -22,6 +22,7 @@ class DesConnectorISpec extends UnitSpec with OneAppPerSuite with WireMockSuppor
   private val environment = "des-env"
 
   override protected def expectedBearerToken = Some(bearerToken)
+
   override protected def expectedEnvironment = Some(environment)
 
   private lazy val connector: DesConnector =

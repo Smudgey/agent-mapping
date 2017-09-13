@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentmapping
+package uk.gov.hmrc.agentmapping.config
 
 import java.net.URL
 import javax.inject.Provider
 
 import com.google.inject.AbstractModule
-import com.google.inject.name.Names.named
+import com.google.inject.name.Names
 import play.api.Mode.Mode
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.agentmapping.connector.DesConnector
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.play.config._
 import uk.gov.hmrc.play.http.{HttpGet, HttpPost}
 
 class GuiceModule(environment: Environment, configuration: Configuration) extends AbstractModule with ServicesConfig {
@@ -46,16 +46,17 @@ class GuiceModule(environment: Environment, configuration: Configuration) extend
   }
 
   private def bindBaseUrl(serviceName: String) =
-    bind(classOf[URL]).annotatedWith(named(s"$serviceName-baseUrl")).toProvider(new BaseUrlProvider(serviceName))
+    bind(classOf[URL]).annotatedWith(Names.named(s"$serviceName-baseUrl")).toProvider(new BaseUrlProvider(serviceName))
 
   private class BaseUrlProvider(serviceName: String) extends Provider[URL] {
     override lazy val get = new URL(baseUrl(serviceName))
   }
 
   private def bindConfigProperty(propertyName: String) =
-    bind(classOf[String]).annotatedWith(named(s"$propertyName")).toProvider(new ConfigPropertyProvider(propertyName))
+    bind(classOf[String]).annotatedWith(Names.named(s"$propertyName")).toProvider(new ConfigPropertyProvider(propertyName))
 
   private class ConfigPropertyProvider(propertyName: String) extends Provider[String] {
     override lazy val get = getConfString(propertyName, throw new RuntimeException(s"No configuration value found for '$propertyName'"))
   }
+
 }

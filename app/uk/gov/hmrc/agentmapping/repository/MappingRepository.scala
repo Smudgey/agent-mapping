@@ -40,7 +40,7 @@ object Mapping extends ReactiveMongoFormats {
 
 @Singleton
 class MappingRepository @Inject()(mongoComponent: ReactiveMongoComponent) extends
-    ReactiveRepository[Mapping, BSONObjectID]("agent-mapping", mongoComponent.mongoConnector.db, formats, ReactiveMongoFormats.objectIdFormats) {
+  ReactiveRepository[Mapping, BSONObjectID]("agent-mapping", mongoComponent.mongoConnector.db, formats, ReactiveMongoFormats.objectIdFormats) {
 
   def findBy(arn: Arn)(implicit ec: ExecutionContext): Future[List[Mapping]] = {
     find(Seq("arn" -> Some(arn)).map(option => option._1 -> toJsFieldJsValueWrapper(option._2.get)): _*)
